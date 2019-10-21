@@ -1,0 +1,30 @@
+{
+  "name": "github-user-parser",
+  "version": "1.0.0",
+  "description": "Github User Information Parser with Node.js",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sangumee/Github-User-Parser.git"
+  },
+  "keywords": [
+    "github",
+    "parser"
+  ],
+  "author": "Sihyeong Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sangumee/Github-User-Parser/issues"
+  },
+  "homepage": "https://github.com/sangumee/Github-User-Parser#readme",
+  "dependencies": {
+    "request": "^2.88.0",
+    "shortid": "^2.2.15"
+  }
+}
