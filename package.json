@@ -1,8 +1,11 @@
 {
-  "name": "github-user-parser",
-  "version": "1.0.0",
-  "description": "Github User Information Parser with Node.js",
+  "name": "github-user-repository-parser",
+  "version": "1.0.1",
+  "description": "Github User Information & Repository Parser with Node.js",
   "main": "app.js",
+  "bin": {
+    "Github-User-Repository-Parser": "./app.js"
+  },
   "directories": {
     "lib": "lib"
   },
