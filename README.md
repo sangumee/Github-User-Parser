@@ -11,6 +11,8 @@ Github User Information & Repository Parser with Node.js with Save to MySQL DB
 
 [Working Video]
 
+Click Image to play it
+
 [![](http://img.youtube.com/vi/L0hq0gtrvYo/0.jpg)](http://www.youtube.com/watch?v=L0hq0gtrvYo)
 
 ## Run & Install
