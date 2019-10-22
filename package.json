@@ -1,6 +1,6 @@
 {
   "name": "github-user-repository-parser",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Github User Information & Repository Parser with Node.js",
   "main": "app.js",
   "bin": {
