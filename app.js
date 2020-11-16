@@ -1,105 +1,96 @@
-/* If you want to save data into MySQL DB you should enter your MySQL Information in ./lib/db.js */
+require('dotenv').config()
 const request = require("request");
-const shortid = require("shortid");
-// const db = require("./lib/db"); // MUST Enter data First!!!
-
-/* Github Personal Access Token */
-/* You Can get it one in "https://github.com/settings/tokens" or you can only request 60 API calls in 1 hour */
-/* if you have some problems with this Issued me in Github or read README.md file!! */
-const accessToken = '';
+const db = require('./lib/db')
+const User = require('./lib/models/userModel');
+const Repo = require('./lib/models/repoModel');
 
 let userId;
-/* Timer Function to avoid API Limit */
+
+/* Timer Function */
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
 
-/* Parser Function */
-async function load() {
-    for (let i = 0; i < 100000; i++) {
-        await timer(1000); // You should change this number If there is error with MySQL
-        let getDataOption = {
-            url: `https://api.github.com/users?access_token=${accessToken}&since=${i}&per_page=1`,
-            headers: {
-                "User-Agent": "request"
-            }
-        };
-        console.log(getDataOption.url);
-        request(getDataOption, function (err, res, profile) { // GET user Information with API
-            let data = JSON.parse(profile);
-            console.log(data[0].login); // Parsing ID Output
-            /* If you want to check all the information of JSON file console.log(profile); */
-            // console.log(profile);
-            if (userId === data[0].login) {
-                console.log(`Same User in ${i}`);
-            } else {
-                console.log(`Different User in ${i}`);
-                userId = data[0].login;
-                if (err) {
-                    console.log(err);
+async function parse() {
+    try {
+        let lastNumber = await User.aggregate(
+            [{
+                $group: {
+                    _id: null,
+                    id: {
+                        $max: "$id"
+                    }
                 }
-                /* Import to MySQL DB Process,
-                in this case I only parse 4 data of them
-                Above code is example of the data
-                */
-                // db.query(
-                //     `INSERT INTO user (loginId, displayId, avatarUrl, name, bio, registerType) VALUES (?, ?, ?, ?, ?, ?)`,
-                //     [
-                //         data[0].login,
-                //         data[0].id,
-                //         data[0].avatar_url,
-                //         data[0].login,
-                //         "Developer",
-                //         "Unregistered"
-                //     ]
-                // );
-
-                /* Github Repository Parsing Process */
-                let githubAPI = "https://api.github.com/users/";
-                let repositoryOptions = {
-                    url: githubAPI +
-                        userId + // userId
-                        `/repos?access_token=${accessToken}&&per_page=100`,
+            }]
+        ).exec()
+        if (lastNumber.length == 0) {   // Start 0
+            lastNumber = 0
+        } else {
+            console.log(`Last Saved User Number : ${lastNumber[0].id}`)
+            for (let i = lastNumber[0].id;; i++) {  // Unlimited
+                await timer(5000);  // You can control the speed of parse but, less then 2000 can got limit from github
+                let getDataOption = {
+                    url: `https://api.github.com/users?since=${i}&per_page=1`,
                     headers: {
-                        "User-Agent": "request"
-                    }
+                        "User-Agent": "request",
+                        'accept': 'application/vnd.github.VERSION.raw',
+                        "Authorization": `token ${process.env.GITHUB_DATA_ACCESS_TOKEN}`,
+                        'charset': 'UTF-8'
+                    },
+                    json: true
                 };
-                request(repositoryOptions, function (error, response, data) {
-                    if (error) {
-                        console.log(error);
+                request(getDataOption, function (err, res, profile) {
+                    // console.log(profile)
+                    if (userId === profile[0].login) {
+                        console.log(`Same User in ${i}`);
+                    } else {
+                        let userDataOption = {
+                            url: `https://api.github.com/users/${profile[0].login}`,
+                            headers: {
+                                'User-Agent': 'request',
+                                'accept': 'application/vnd.github.VERSION.raw',
+                                "Authorization": `token ${process.env.GITHUB_DATA_ACCESS_TOKEN}`,
+                                'charset': 'UTF-8'
+                            },
+                            json: true
+                        }
+                        console.log(`Different User in ${i}`);
+                        userId = profile[0].login;
+                        console.log(profile[0].login)
+                        request(userDataOption, function (err, res, userData) {
+                            if (err) console.log(err)
+                            User.create(userData, function (err, result) {
+                                if (err) console.log(err);
+                            });
+                        })
+                        let repositoryOptions = {
+                            url: `https://api.github.com/users/${userId}/repos?per_page=100`,
+                            headers: {
+                                'User-Agent': 'request',
+                                'accept': 'application/vnd.github.VERSION.raw',
+                                "Authorization": `token ${process.env.GITHUB_DATA_ACCESS_TOKEN}`,
+                                'charset': 'UTF-8'
+                            },
+                            json: true
+                        }
+                        request(repositoryOptions, function (err, res, repoData) {
+                            if (err) console.log(err);
+                            if (!repoData.length == 0 || repoData.fork == false) {
+                                Repo.insertMany(repoData, function (err, result) {
+                                    if (err) throw err;
+                                })
+                            }
+                        })
+                        if (err) {
+                            console.log(err);
+                        }
                     }
-                    let result = JSON.parse(data);
-                    /* To check data field console.log it */
-                    // console.log(result);
-                    for (i = 0; i < result.length; i++) {
-                        let sid = shortid.generate();
-                        let userId = result[i].owner.login;
-                        let projectName = result[i].name;
-                        let githubUrl = result[i].html_url;
-                        let summary = result[i].description;
-                        let keyword = `{"language" : "${result[i].language}"}`;
-                        let projectDate1 = result[i].created_at;
-                        let projectDate2 = result[i].updated_at;
-                        let sqlData = [
-                            sid,
-                            userId,
-                            projectName,
-                            githubUrl,
-                            summary,
-                            keyword,
-                            projectDate1,
-                            projectDate2
-                        ];
-                        console.log(sqlData);
-                        /* You have to choose the data field you want. */
-                        // let sql = `INSERT INTO project (sid, userId, projectName, githubUrl, summary, keyword, projectDate1, projectDate2) VALUES (?,?,?,?,?,?,?,?)`; // PUT All Data to DB
-                        // db.query(sql, sqlData);
-                    }
-                });
+                })
             }
-        });
+        }
+    } catch (err) {
+        throw err;
     }
-    // await timer(2000);
 }
 
-load(); // RUN
+parse();    // Run App
