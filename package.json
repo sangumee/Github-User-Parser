@@ -33,6 +33,8 @@
   "homepage": "https://github.com/sangumee/Github-User-Parser#readme",
   "dependencies": {
     "request": "^2.88.0",
-    "shortid": "^2.2.15"
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.7",
+    "crypto-random-string": "^3.3.0"
   }
 }
