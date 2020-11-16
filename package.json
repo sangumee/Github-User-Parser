@@ -1,7 +1,7 @@
 {
-  "name": "github-user-repository-parser",
-  "version": "1.0.3",
-  "description": "Github User Information & Repository Parser with Node.js",
+  "name": "github-user-data-parser-mongodb",
+  "version": "1.0.4",
+  "description": "Github User Information & Repository Parser with Node.js & MongoDB",
   "main": "app.js",
   "bin": {
     "parser": "./app.js"
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sangumee/Github-User-Parser.git"
+    "url": "git+https://github.com/writingtdeveloper/Github-User-Parser.git"
   },
   "keywords": [
     "github",
@@ -28,9 +28,9 @@
   "author": "Sihyeong Lee",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sangumee/Github-User-Parser/issues"
+    "url": "https://github.com/writingtdeveloper/Github-User-Parser/issues"
   },
-  "homepage": "https://github.com/sangumee/Github-User-Parser#readme",
+  "homepage": "https://github.com/writingtdeveloper/Github-User-Parser#readme",
   "dependencies": {
     "request": "^2.88.0",
     "dotenv": "^8.2.0",
