@@ -1,6 +1,6 @@
 # Github-User-Repository-Parser
 
-![Build Status](https://travis-ci.org/sangumee/Github-User-Repository-Parser.svg?branch=master) ![](https://img.shields.io/badge/Code%20Statue-Close-red.svg) ![npm](https://img.shields.io/npm/dt/github-user-repository-parser)
+[![Build Status](https://travis-ci.org/writingdeveloper/Github-User-Repository-Parser.svg?branch=master)](https://travis-ci.org/writingdeveloper/Github-User-Repository-Parser) ![](https://img.shields.io/badge/Code%20Statue-Close-red.svg) ![npm](https://img.shields.io/npm/dt/github-user-repository-parser)
 
 Github User Information & Repository Parser with Node.js
 It also have save to MySQL DB function.
