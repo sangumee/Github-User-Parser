@@ -1,15 +1,12 @@
-# Github-User-Repository-Parser
+# Github-User-Repository-Parser-MongoDB
 
-![Build Status](https://travis-ci.org/sangumee/Github-User-Repository-Parser.svg?branch=master) ![](https://img.shields.io/badge/Code%20Statue-Close-red.svg) ![npm](https://img.shields.io/npm/dt/github-user-repository-parser)
-
-Github User Information & Repository Parser with Node.js
-It also have save to MySQL DB function.
+![Build Status](https://travis-ci.org/writingdeveloper/Github-User-Repository-Parser.svg?branch=master) ![](https://img.shields.io/badge/Develoment-Close-red.svg) ![npm](https://img.shields.io/npm/dt/github-user-repository-parser)
 
 ## Introduction
 
-Github User Information & Repository Parser with Node.js with Save to MySQL DB
+Github User Information & Repository Parser and automatically save it to MongoDB Database.
 
-[Working Video]
+[Demo Video]
 
 Click Image to play it
 
@@ -22,48 +19,43 @@ This program was tested on Node.js LTS. You need the Node.js LTS version to run 
 ## 👨‍💻FINISHED👨‍💻
 
 ✅ Parsing user information and each user's repositories  
-✅ Upload parsed data to MySQL (Optional /lib/db.js)
+✅ Upload parsed data to MongoDB (Optional .env)  
+✅ When it stopped and run app again, it gets last parse number so you can parse continually.
 
 ## Installation
 
-If you want to store data in the MySQL database, you must check the annotated code and create the column in the MySQL database. If you have any problems, please let us know via the Github Issue tab.
+1. You should create two collections (users, repos) in your MongoDB Database.
 
-The tested version is shown below and is developed based on the LTS version of Node.js.
+2. Download package from Github or NPM
 
-If you download and use the program directly in your local environment, you can run the program through the following command: However, this program is also uploaded to NPM, so it is recommended to use NPM.
+3. Fix the .env file to use Environment variables.
 
-[Use NPM]
+4. Open any terminal and run ```node app.js```
 
+## Using with PM2 (Preferred)  
+
+1. Install PM2 Package globally with this command. 
 ```
-npm install github-user-repository-parser
-```
-
-and then start with this command
-
-```
-node app.js
+npm install -g pm2
 ```
 
-[Local Environment]
-
+2. Access to app folder and use this command.
 ```
-npm install
-```
-
-with installing modules.
-
-After Installing process you can run this web app with this command.
-
-```
-node app.js
+pm2 start app.js --watch
 ```
 
-If you want to save data into MySQL, You need to enter your MySQL Information in ./lib/db.js
+3. You can check the log from this command.
+```
+pm2 monit
+```
 
-## Built With
-
-- [Node.js](https://nodejs.org)
+Using with pm2 it's really usefull that you can close the terminal.
 
 ## Contact
 
-If you have some questions or issues about this repository please contact me with the Issue section.
+If you have any problems, please let us know via the [Github Issue](https://github.com/writingdeveloper/Github-User-Repository-Parser-MongoDB/issues) tab.
+
+
+## Built With
+- [Node.js](https://nodejs.org)
+- [Mongoose.js](https://mongoosejs.com)
